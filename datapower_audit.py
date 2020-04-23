@@ -5,8 +5,10 @@ import filecmp
 import shutil
 import xml.etree.ElementTree as ET
 import base64
-
-def fetch(path):                                                              #Fetch function takes path to audit file as argument and sends fetch request to server
+############################################################################################################################################
+#This code requires be trigred with a cronjob or it can be modified to run as a daemon to triger it self. My suggestion is to run every 5 min
+#############################################################################################################################################
+def fetch(path):                                                             #Fetch function takes path to audit file as argument and sends fetch request to server
  request= """<?xml version="1.0" encoding="UTF-8"?>                                  
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
 <soapenv:Body>
@@ -34,7 +36,7 @@ if os.path.isfile('switch/audit-log'):                                        #H
  print ("Working with audit-log file")
  fetch("audit:///audit-log")
  if filecmp.cmp('audit_new.txt', 'switch/audit-log') == False:
-  print('files sizes are different. New log file will be overriden')          #switch and audit directories must be created before running code. 
+  print('files sizes are different. New log file will be overriden')          #/switch and /audit directories must be created before running code. 
   os.remove('switch/audit-log')
   shutil.move('audit_new.txt', 'switch/audit_new.txt')
   os.rename('switch/audit_new.txt', 'switch/audit-log')
